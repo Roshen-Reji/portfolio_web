@@ -1,0 +1,41 @@
+/* src/styles/variables.css */
+
+:root {
+  /* =========================================
+     PORTFOLIO THEME (Main Site)
+     ========================================= */
+  --bg-start: #050a0e;
+  --bg-mid:   #0d2b30;
+  --bg-end:   #154148;
+  --accent:   #1a7a85;
+  --glow:     #00E5FF;
+  --text:     #ffffff;
+  
+  --font-main: 'Montserrat', sans-serif;
+  --font-cursive: 'Playfair Display', serif;
+
+  --glass-bg: linear-gradient(180deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.02) 100%);
+  --glass-blur: 25px;
+
+  /* =========================================
+     ADMIN DASHBOARD THEME
+     ========================================= */
+  --bg-deep: #030305;
+  --glass-panel: rgba(20, 20, 23, 0.65);
+  --glass-border: rgba(255, 255, 255, 0.08);
+  --admin-glass-blur: 24px;
+  
+  --primary: #22d3ee; /* Cyan */
+  --primary-glow: rgba(34, 211, 238, 0.4);
+  --secondary: #818cf8; /* Indigo */
+  
+  --text-main: #ffffff;
+  --text-muted: #94a3b8;
+  
+  --success: #10b981;
+  --danger: #ef4444;
+  
+  --radius-lg: 24px;
+  --radius-md: 16px;
+  --radius-sm: 12px;
+}

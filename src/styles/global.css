@@ -6,7 +6,7 @@
 @font-face {
     font-family: 'Beyno';
     /* Update this path based on where you put the font file */
-    src: url('../assets/fonts/BEYNO.ttf') format('truetype');
+    src: url('../fonts/BEYNO.ttf') format('truetype');
     font-weight: normal;
     font-style: normal;
 }

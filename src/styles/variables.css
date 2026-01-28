@@ -20,22 +20,16 @@
   /* =========================================
      ADMIN DASHBOARD THEME
      ========================================= */
-  --bg-deep: #030305;
-  --glass-panel: rgba(20, 20, 23, 0.65);
-  --glass-border: rgba(255, 255, 255, 0.08);
-  --admin-glass-blur: 24px;
+--admin-nav-bg: #050a0e;       /* Dark sidebar (Matches portfolio bg-start) */
+  --admin-body-bg: #0d1b21;      /* Slightly lighter content area */
+  --admin-card-bg: rgba(26, 122, 133, 0.1); /* Glassy Teal */
   
-  --primary: #22d3ee; /* Cyan */
-  --primary-glow: rgba(34, 211, 238, 0.4);
-  --secondary: #818cf8; /* Indigo */
+  /* Accents */
+  --admin-primary: #00E5FF;      /* Cyan Glow */
+  --admin-accent: #1a7a85;       /* Teal Base */
+  --admin-text: #ffffff;
+  --admin-text-muted: #64748b;
   
-  --text-main: #ffffff;
-  --text-muted: #94a3b8;
-  
-  --success: #10b981;
-  --danger: #ef4444;
-  
-  --radius-lg: 24px;
-  --radius-md: 16px;
-  --radius-sm: 12px;
+  /* Shapes */
+  --curve-size: 20px;
 }

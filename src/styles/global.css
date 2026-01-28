@@ -759,13 +759,13 @@ body {
     .footer-section { padding: 2rem 1.5rem; }
     .footer-top { grid-template-columns: 1fr; gap: 2rem; text-align: center; }
     .center-col, .right-col { text-align: center; }
-    .footer-bottom { flex-direction: column; align-items: center; gap: 2rem; text-align: center;width:100%; }
-    .footer-legal { text-align: center; }
+    .footer-bottom { flex-direction: column; align-items: center; gap: 2rem; text-align: center; width:100%;}
     .footer-contact, .footer-legal {
         text-align: center;
         align-items: center; /* Align flex children (links) to center */
         width: 100%;
     }
+    .footer-legal { text-align: center; }
     .cert-section {
         padding: 4rem 1rem; /* Reduce padding on mobile to give cards more space */
     }

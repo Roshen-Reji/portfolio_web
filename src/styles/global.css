@@ -391,7 +391,7 @@ body {
 
 .cert-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
     gap: 3rem;
     width: 100%; max-width: 1200px;
     padding: 2rem;
@@ -759,6 +759,19 @@ body {
     .footer-section { padding: 2rem 1.5rem; }
     .footer-top { grid-template-columns: 1fr; gap: 2rem; text-align: center; }
     .center-col, .right-col { text-align: center; }
-    .footer-bottom { flex-direction: column; align-items: center; gap: 2rem; text-align: center; }
+    .footer-bottom { flex-direction: column; align-items: center; gap: 2rem; text-align: center;width:100%; }
     .footer-legal { text-align: center; }
+    .footer-contact, .footer-legal {
+        text-align: center;
+        align-items: center; /* Align flex children (links) to center */
+        width: 100%;
+    }
+    .cert-section {
+        padding: 4rem 1rem; /* Reduce padding on mobile to give cards more space */
+    }
+    
+    .cert-grid {
+        gap: 2rem; /* Reduce gap on mobile */
+        padding: 1rem;
+    }
 }

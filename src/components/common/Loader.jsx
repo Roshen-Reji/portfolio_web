@@ -11,16 +11,12 @@ const Loader = ({ name }) => {
     }, []);
 
     if (!visible) return null;
-
-    const firstName = name ? name.split(' ')[0].toUpperCase() : "LOADING";
+    const firstName = name && name !== "Loading" 
+        ? name.split(' ')[0].toUpperCase() 
+        : "ROSHEN"; 
 
     return (
         <div id="loader-overlay" style={{ opacity: visible ? 1 : 0, visibility: visible ? 'visible' : 'hidden' }}>
-            {/* ADDED: viewBox="0 0 1320 300" 
-               This sets a virtual canvas of 1320px wide by 300px high.
-               The SVG will now scale its contents to fit the screen width 
-               while maintaining the 150px font proportions relative to this box.
-            */}
             <svg 
                 className="loader-svg" 
                 viewBox="0 0 1320 300" 

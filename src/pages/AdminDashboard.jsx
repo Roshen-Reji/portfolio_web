@@ -15,23 +15,17 @@ import LinkTool from '../components/admin/LinkTool';
 import '../styles/admin.css';
 
 const AdminDashboard = () => {
-    // --- AUTH CONTEXT ---
-    // We use the global AuthContext instead of local state
     const { isAdmin, login } = useAuth();
-
-    // --- LOCAL STATE ---
     const [activeTab, setActiveTab] = useState('home');
     const [data, setData] = useState(null);
     const [status, setStatus] = useState("Ready");
 
-    // --- INITIAL DATA LOAD ---
     useEffect(() => {
         if (isAdmin) {
             loadData();
         }
     }, [isAdmin]);
 
-    // --- ACTIONS ---
     const loadData = async () => {
         setStatus("Loading...");
         const result = await fetchPortfolioData();
@@ -41,6 +35,26 @@ const AdminDashboard = () => {
 
     const handleSave = async () => {
         if (!data) return;
+
+        // Helper to check if a string is a valid image URL
+        const isImage = (url) => {
+            if (!url) return true; // Allow empty
+            return /\.(jpg|jpeg|png|gif|webp|avif|svg)/i.test(url) || url.includes('googleusercontent.com');
+        };
+
+        // Validate Mission Image
+        if (!isImage(data.mission.image)) {
+            alert("Error: The Mission image URL is not a valid image link.");
+            return;
+        }
+
+        // Validate Certificate Images
+        const invalidCert = data.certificates.find(cert => !isImage(cert.image));
+        if (invalidCert) {
+            alert(`Error: Certificate "${invalidCert.title}" has an invalid image link.`);
+            return;
+        }
+
         setStatus("Saving...");
         const result = await savePortfolioData(data);
         
@@ -53,9 +67,6 @@ const AdminDashboard = () => {
         }
     };
 
-    // --- STATE UPDATERS ---
-
-    // 1. For nested objects (Hero, Mission)
     const updateSection = (section, key, value) => {
         setData(prev => ({
             ...prev,
@@ -66,8 +77,57 @@ const AdminDashboard = () => {
         }));
     };
 
-    // 2. For Lists (Skills, Projects, Certs, Socials)
+    // --- UPDATED STATE UPDATER WITH VALIDATION ---
     const updateList = (section, index, key, value) => {
+        // 1. Socials Validation logic
+        if (section === 'socials' && key === 'url') {
+            const item = data.socials[index];
+            const platform = item.platform.toLowerCase();
+            
+            const rules = {
+                github: {
+                    pattern: /github\.com/i,
+                    error: "Invalid GitHub link. Please enter a valid github.com URL."
+                },
+                linkedin: {
+                    pattern: /linkedin\.com/i,
+                    error: "Invalid LinkedIn link. Please enter a valid linkedin.com URL."
+                },
+                instagram: {
+                    pattern: /instagram\.com/i,
+                    error: "Invalid Instagram link. Please enter a valid instagram.com URL."
+                },
+            };
+
+            // Only validate if a rule exists for this platform and the value isn't empty
+            if (rules[platform] && value !== "" && !rules[platform].pattern.test(value)) {
+                alert(rules[platform].error);
+                return; // Block the state update
+            }
+        }
+
+        // 2. Certificates Year Validation
+        if (section === 'certificates' && key === 'year') {
+            const currentYear = new Date().getFullYear();
+            const inputYear = parseInt(value);
+
+            if (inputYear > currentYear) {
+                alert(`Invalid Year: ${value}. You cannot enter a future year.`);
+                return; 
+            }
+        }
+        //3.No repetition For Skills
+        if (section === 'skills' && key === 'title') {
+        const isDuplicate = data.skills.some((skill, i) => 
+            i !== index && skill.title.toLowerCase() === value.toLowerCase().trim()
+        );
+
+        if (isDuplicate && value !== "") {
+            alert(`The skill "${value}" already exists in your list.`);
+            return; // Block the update
+        }
+    }
+
         setData(prev => {
             const newList = [...prev[section]];
             newList[index] = { ...newList[index], [key]: value };
@@ -90,17 +150,14 @@ const AdminDashboard = () => {
         }));
     };
 
-    // --- RENDER CONTENT SWITCHER ---
     const renderContent = () => {
         if (!data) return <div className="loading-state">Loading Data...</div>;
 
         switch (activeTab) {
             case 'home':
                 return <HeroEditor data={data.hero} update={(k, v) => updateSection('hero', k, v)} />;
-            
             case 'mission':
                 return <MissionEditor data={data.mission} update={(k, v) => updateSection('mission', k, v)} />;
-
             case 'skills':
                 return (
                     <ListEditor 
@@ -112,11 +169,19 @@ const AdminDashboard = () => {
                             { key: 'desc', label: 'Description', type: 'textarea' }
                         ]}
                         onUpdate={(i, k, v) => updateList('skills', i, k, v)}
-                        onAdd={() => addListItem('skills', { icon: '⚡', title: 'New Skill', desc: '...' })}
+                       onAdd={() => {
+                            const defaultTitle = "New Skill";
+                            const exists = data.skills.some(s => s.title === defaultTitle);
+                            
+                            if (exists) {
+                                alert("Please rename the existing 'New Skill' before adding another.");
+                            } else {
+                                addListItem('skills', { icon: '⚡', title: defaultTitle, desc: '...' });
+                            }
+                        }}
                         onDelete={(i) => deleteListItem('skills', i)}
                     />
                 );
-
             case 'projects':
                 return (
                     <ListEditor 
@@ -134,7 +199,6 @@ const AdminDashboard = () => {
                         onDelete={(i) => deleteListItem('projects', i)}
                     />
                 );
-
             case 'certs':
                 return (
                     <ListEditor 
@@ -151,7 +215,6 @@ const AdminDashboard = () => {
                         onDelete={(i) => deleteListItem('certificates', i)}
                     />
                 );
-
             case 'socials':
                 return (
                     <ListEditor 
@@ -167,19 +230,13 @@ const AdminDashboard = () => {
                         onDelete={(i) => deleteListItem('socials', i)}
                     />
                 );
-
             case 'tools':
                 return <LinkTool />;
-
             default:
                 return null;
         }
     };
 
-    // --- MAIN RENDER ---
-    
-    // 1. Not Logged In -> Show Login Overlay
-    // We pass the global 'login' function to the overlay
     if (!isAdmin) {
         return <LoginOverlay onLogin={(u, p) => {
             const res = login(u, p);
@@ -187,15 +244,12 @@ const AdminDashboard = () => {
         }} />;
     }
 
-    // 2. Logged In -> Show Dashboard
     return (
         <div className="admin-body">
             <Sidebar activeTab={activeTab} setActiveTab={setActiveTab} />
-            
             <main className="main">
                 {renderContent()}
             </main>
-            
             <div className="dock">
                 <div id="statusMsg" className={status === "Published!" ? "success-text" : ""}>
                     {status}

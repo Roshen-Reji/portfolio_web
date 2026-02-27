@@ -3,6 +3,7 @@ import React from 'react';
 const Mission = ({ data }) => {
     return (
         <section className="mission-section visible">
+            
             <div className="mission-container">
                 <div className="mission-content">
                     <span className="label-pill">Our Mission</span>
@@ -12,7 +13,10 @@ const Mission = ({ data }) => {
                 <div className="image-container">
                     <div className="image-wrapper">
                         {data?.image && (
-                            <img src={data.image} alt="Mission" className="mission-image" />
+                            <img src={data.image} alt="Mission" className="mission-image"
+                            onError={(e) => {
+                                 e.target.style.display = 'none';
+                              }} />
                         )}
                     </div>
                 </div>

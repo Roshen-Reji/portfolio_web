@@ -25,9 +25,7 @@ const Portfolio = () => {
         };
         load();
     }, []);
-
-    if (loading) return <Loader name={data?.hero?.name || "Loading"} />;
-
+if (loading || !data) return <Loader name={data?.hero?.name || "ROSHEN REJI"} />;
     return (
         <main>
             <BackgroundLines />
